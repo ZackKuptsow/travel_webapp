@@ -1,0 +1,11 @@
+repos:
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.9.0  # Use the latest version of mypy
+    hooks:
+      - id: mypy
+        additional_dependencies: [types-requests]  # Add any additional dependencies here
+
+  - repo: https://github.com/charliermarsh/ruff-pre-commit
+    rev: v0.3.5  # Use the latest version of ruff
+    hooks:
+      - id: ruff
