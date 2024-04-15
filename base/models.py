@@ -19,8 +19,8 @@ class UserProfile(Model):
         settings.AUTH_USER_MODEL,
         on_delete=CASCADE,
     )
-    first_name = CharField(max_length=255)
-    last_name = CharField(max_length=255)
+
+    data_joined = DateTimeField(auto_now_add=True)
 
     created_at = DateTimeField(auto_now_add=True)
     updated_at = DateTimeField(auto_now_add=True)
@@ -30,7 +30,7 @@ class UserProfile(Model):
     class Meta:
         db_table = "user_profiles"
         get_latest_by = "created_at"
-        ordering = "-created_at"
+        ordering = ("-created_at",)
         verbose_name = "user_profile"
         verbose_name_plural = "user_profiles"
 
@@ -66,7 +66,7 @@ class Booking(Model):
         abstract = True
         db_table = "bookings"
         get_latest_by = "created_at"
-        ordering = "-created_at"
+        ordering = ("-created_at",)
         verbose_name = "booking"
         verbose_name_plural = "bookings"
 
