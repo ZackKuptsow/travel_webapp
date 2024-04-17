@@ -8,38 +8,46 @@ from django.db.models import (
     Model,
     URLField,
 )
-from django.conf import settings
+from django.contrib.auth.models import User
 from simple_history.models import HistoricalRecords
 
+# NOT NECESSARY AT THE MOMENT -> switch foreign keys if re-implemented
+# class UserProfile(Model):
+#     """Model to store all basic user information."""
 
-class UserProfile(Model):
-    """Model to store all basic user information."""
+#     user = ForeignKey(
+#         settings.AUTH_USER_MODEL,
+#         on_delete=CASCADE,
+#     )
 
-    user = ForeignKey(
-        settings.AUTH_USER_MODEL,
-        on_delete=CASCADE,
-    )
+#     data_joined = DateTimeField(auto_now_add=True)
 
-    data_joined = DateTimeField(auto_now_add=True)
+#     created_at = DateTimeField(auto_now_add=True)
+#     updated_at = DateTimeField(auto_now_add=True)
 
-    created_at = DateTimeField(auto_now_add=True)
-    updated_at = DateTimeField(auto_now_add=True)
+#     history = HistoricalRecords()
 
-    history = HistoricalRecords()
-
-    class Meta:
-        db_table = "user_profiles"
-        get_latest_by = "created_at"
-        ordering = ("-created_at",)
-        verbose_name = "user_profile"
-        verbose_name_plural = "user_profiles"
+#     class Meta:
+#         db_table = "user_profiles"
+#         get_latest_by = "created_at"
+#         ordering = ("-created_at",)
+#         verbose_name = "user_profile"
+#         verbose_name_plural = "user_profiles"
 
 
 class Booking(Model):
     """Abstract model to track users involved and event information."""
 
-    admin = ForeignKey(UserProfile, on_delete=CASCADE, related_name="admin_bookings")
-    invitees = ManyToManyField(UserProfile, related_name="invitee_bookings")
+    class Meta:
+        abstract = True
+        db_table = "bookings"
+        get_latest_by = "created_at"
+        ordering = ("-created_at",)
+        verbose_name = "booking"
+        verbose_name_plural = "bookings"
+
+    admin = ForeignKey(User, on_delete=CASCADE, related_name="admin_bookings")
+    invitees = ManyToManyField(User, related_name="invitee_bookings")
 
     cost = DecimalField(max_digits=12, decimal_places=2, blank=True, null=True)
     name = CharField(max_length=1000)
@@ -60,15 +68,7 @@ class Booking(Model):
     created_at = DateTimeField(auto_now_add=True)
     updated_at = DateTimeField(auto_now_add=True)
 
-    history = HistoricalRecords()
-
-    class Meta:
-        abstract = True
-        db_table = "bookings"
-        get_latest_by = "created_at"
-        ordering = ("-created_at",)
-        verbose_name = "booking"
-        verbose_name_plural = "bookings"
+    history = HistoricalRecords(inherit=True)
 
     def _reassign_admin(self):
         """TODO: Handle reassignment to invitees if admin is deleted or needs to be reassigned."""

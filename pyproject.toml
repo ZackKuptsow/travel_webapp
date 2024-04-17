@@ -26,6 +26,7 @@ pytest-django = "^4.8.0"
 minversion = "7.1.3"
 DJANGO_SETTINGS_MODULE = "travel_webapp.settings"
 testpaths = [
+    "activity/tests",
     "base/tests",
 ]
 python_files = [
