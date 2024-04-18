@@ -1,8 +1,10 @@
 from decimal import Decimal, ROUND_HALF_UP
 from django.contrib.auth.models import User
+from django.core.validators import RegexValidator
 from django.db.models import (
     Avg,
     CASCADE,
+    CharField,
     DateTimeField,
     DecimalField,
     ForeignKey,
@@ -11,7 +13,7 @@ from django.db.models import (
 )
 from simple_history.models import HistoricalRecords
 
-from base.models import Booking
+from base.models import Address, Booking
 
 
 RATING_CHOICES = [
@@ -28,9 +30,17 @@ RATING_CHOICES = [
     (5.0, "5.0"),
 ]
 
+phone_regex = RegexValidator(
+    regex=r"^\+?1?\d{9,15}$",
+    message="Phone number must be entered in the format: '+999999999'. Up to 15 digits allowed.",
+)
+
 
 class ActivityBooking(Booking):
     """Model representing a bookable activity."""
+
+    phone_number = CharField(validators=[phone_regex], max_length=17, blank=True)
+    address = ForeignKey(Address)
 
     class Meta:
         db_table = "bookings_activity"
@@ -50,6 +60,10 @@ class ActivityBooking(Booking):
                 Decimal("1"), rounding=ROUND_HALF_UP
             ) / 2
         return Decimal(0.0)
+
+    def calculate_travel_time(self):
+        """Given a HousingBooking, calculate the travel time to ActivityBooking."""
+        pass
 
 
 class ActivityComment(Model):
@@ -79,3 +93,6 @@ class ActivityComment(Model):
     updated_at = DateTimeField(auto_now_add=True)
 
     history = HistoricalRecords()
+
+
+# TODO: ActivityPitcure attached to S3 upload

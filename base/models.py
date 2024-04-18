@@ -1,3 +1,6 @@
+from decimal import Decimal
+from django.contrib.auth.models import User
+from django.contrib.gis.db.models import PointField
 from django.db.models import (
     CASCADE,
     CharField,
@@ -8,7 +11,6 @@ from django.db.models import (
     Model,
     URLField,
 )
-from django.contrib.auth.models import User
 from simple_history.models import HistoricalRecords
 
 # NOT NECESSARY AT THE MOMENT -> switch foreign keys if re-implemented
@@ -33,6 +35,33 @@ from simple_history.models import HistoricalRecords
 #         ordering = ("-created_at",)
 #         verbose_name = "user_profile"
 #         verbose_name_plural = "user_profiles"
+
+
+class Address(Model):
+    """Physical address model."""
+
+    class Meta:
+        db_table = "addresses"
+        verbose_name = "address"
+        verbose_name_plural = "addresses"
+
+    user = ForeignKey(User, related_name="addresses")
+    full_name = CharField(max_length=512)
+    address_line_1 = CharField(max_length=256)
+    address_line_2 = CharField(max_length=256, blank=True, null=True)
+    city_or_province = CharField(max_length=128)
+    country = CharField(max_length=3)
+    zipcode = CharField(max_length=16)
+
+    location = PointField()
+
+    @property
+    def latitude(self) -> Decimal:
+        return self.location.y
+
+    @property
+    def longitude(self) -> Decimal:
+        return self.location.x
 
 
 class Booking(Model):
