@@ -2,6 +2,20 @@
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
+[tool.django-stubs]
+django_settings_module = "travel_webapp.settings"
+strict_settings = false
+
+[tool.mypy]
+ignore_missing_imports = true
+exclude = '''
+/(
+    | migrations
+)/
+'''
+plugins = ["mypy_django_plugin.main"]
+
+
 [tool.poetry]
 name = "travel-webapp"
 version = "0.1.0"
@@ -24,6 +38,13 @@ django-constance = "^3.1.0"
 
 [tool.poetry.group.dev.dependencies]
 pytest-django = "^4.8.0"
+django-stubs = "^4.2.7"
+
+[tool.pydocstyle]
+convention = "pep257"
+add-ignore = ["D100", "D104", "D106", "D203", "D212", "D406", "D407", "D411", "D413"]
+add-select = ["D400"]
+match = '(.*\/migrations\/.*) | ((?!apps).)*\.py'
 
 [tool.pytest.ini_options]
 minversion = "7.1.3"

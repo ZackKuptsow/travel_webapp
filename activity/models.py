@@ -7,12 +7,14 @@ from django.db.models import (
     CharField,
     DateTimeField,
     DecimalField,
+    DO_NOTHING,
     ForeignKey,
     Model,
     TextField,
 )
 from simple_history.models import HistoricalRecords
 
+from activity.typed_dicts import ActivityBookingToDict
 from base.models import Address, Booking
 
 
@@ -39,15 +41,30 @@ phone_regex = RegexValidator(
 class ActivityBooking(Booking):
     """Model representing a bookable activity."""
 
-    phone_number = CharField(validators=[phone_regex], max_length=17, blank=True)
-    address = ForeignKey(Address)
-
     class Meta:
         db_table = "bookings_activity"
         get_latest_by = "created_by"
         ordering = ("-created_at",)
         verbose_name = "activity"
         verbose_name_plural = "activities"
+
+    phone_number = CharField(validators=[phone_regex], max_length=15, blank=True)
+    address = ForeignKey(Address, on_delete=DO_NOTHING)
+
+    def to_dict(self) -> ActivityBookingToDict:
+        """Convert model instance to dictionary.
+
+        Returns:
+            ActivityBookingToDict: dictionary representation of instance
+        """
+        data = super().to_dict()
+        updated_data: ActivityBookingToDict = {
+            **data,
+            "phone_number": self.phone_number,
+            "address": self.address.id if self.address else None,
+            "rating": self.rating,
+        }
+        return updated_data
 
     @property
     def rating(self) -> Decimal:
@@ -95,4 +112,4 @@ class ActivityComment(Model):
     history = HistoricalRecords()
 
 
-# TODO: ActivityPitcure attached to S3 upload
+# TODO: ActivityPicture attached to S3 upload

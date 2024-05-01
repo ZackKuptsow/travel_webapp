@@ -12,9 +12,14 @@ class TestActivityBookings:
     """Test class for ActivityBooking."""
 
     def setup_method(self):
+        """Create instances for tests below."""
         self.activity_booking = ActivityBookingFactory()
 
     def test_calculate_rating(self):
+        """Test the ActivityBooking rating method.
+
+        The method calls all ActvityComments related to an ActivityBooking.
+        """
         size = 10
         ratings = [Decimal(choice(RATING_CHOICES)[1]) for _ in range(size)]
         ratings_iter = Iterator(ratings)

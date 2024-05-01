@@ -94,6 +94,42 @@ files = [
 asgiref = ">=3.6"
 
 [[package]]
+name = "django-stubs"
+version = "4.2.7"
+description = "Mypy stubs for Django"
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "django-stubs-4.2.7.tar.gz", hash = "sha256:8ccd2ff4ee5adf22b9e3b7b1a516d2e1c2191e9d94e672c35cc2bc3dd61e0f6b"},
+    {file = "django_stubs-4.2.7-py3-none-any.whl", hash = "sha256:4cf4de258fa71adc6f2799e983091b9d46cfc67c6eebc68fe111218c9a62b3b8"},
+]
+
+[package.dependencies]
+django = "*"
+django-stubs-ext = ">=4.2.7"
+types-pytz = "*"
+types-PyYAML = "*"
+typing-extensions = "*"
+
+[package.extras]
+compatible-mypy = ["mypy (>=1.7.0,<1.8.0)"]
+
+[[package]]
+name = "django-stubs-ext"
+version = "4.2.7"
+description = "Monkey-patching and extensions for django-stubs"
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "django-stubs-ext-4.2.7.tar.gz", hash = "sha256:519342ac0849cda1559746c9a563f03ff99f636b0ebe7c14b75e816a00dfddc3"},
+    {file = "django_stubs_ext-4.2.7-py3-none-any.whl", hash = "sha256:45a5d102417a412e3606e3c358adb4744988a92b7b58ccf3fd64bddd5d04d14c"},
+]
+
+[package.dependencies]
+django = "*"
+typing-extensions = "*"
+
+[[package]]
 name = "djangorestframework"
 version = "3.15.1"
 description = "Web APIs for Django, made easy."
@@ -391,6 +427,28 @@ dev = ["build", "hatch"]
 doc = ["sphinx"]
 
 [[package]]
+name = "types-pytz"
+version = "2024.1.0.20240417"
+description = "Typing stubs for pytz"
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "types-pytz-2024.1.0.20240417.tar.gz", hash = "sha256:6810c8a1f68f21fdf0f4f374a432487c77645a0ac0b31de4bf4690cf21ad3981"},
+    {file = "types_pytz-2024.1.0.20240417-py3-none-any.whl", hash = "sha256:8335d443310e2db7b74e007414e74c4f53b67452c0cb0d228ca359ccfba59659"},
+]
+
+[[package]]
+name = "types-pyyaml"
+version = "6.0.12.20240311"
+description = "Typing stubs for PyYAML"
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "types-PyYAML-6.0.12.20240311.tar.gz", hash = "sha256:a9e0f0f88dc835739b0c1ca51ee90d04ca2a897a71af79de9aec5f38cb0a5342"},
+    {file = "types_PyYAML-6.0.12.20240311-py3-none-any.whl", hash = "sha256:b845b06a1c7e54b8e5b4c683043de0d9caf205e7434b3edc678ff2411979b8f6"},
+]
+
+[[package]]
 name = "typing-extensions"
 version = "4.11.0"
 description = "Backported and Experimental Type Hints for Python 3.8+"
@@ -415,4 +473,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11.5"
-content-hash = "55a871d710c8b9470ce2092f25ac80583e0804ee9291d439894222b376b84b54"
+content-hash = "d69729ee790b59c7fd31f7cc448c42e78910543445ad88d286fa9ec261426ed7"

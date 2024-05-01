@@ -13,6 +13,8 @@ from django.db.models import (
 )
 from simple_history.models import HistoricalRecords
 
+from base.typed_dicts import BookingToDict
+
 # NOT NECESSARY AT THE MOMENT -> switch foreign keys if re-implemented
 # class UserProfile(Model):
 #     """Model to store all basic user information."""
@@ -45,23 +47,32 @@ class Address(Model):
         verbose_name = "address"
         verbose_name_plural = "addresses"
 
-    user = ForeignKey(User, related_name="addresses")
     full_name = CharField(max_length=512)
     address_line_1 = CharField(max_length=256)
     address_line_2 = CharField(max_length=256, blank=True, null=True)
     city_or_province = CharField(max_length=128)
-    country = CharField(max_length=3)
+    country = CharField(max_length=2)
     zipcode = CharField(max_length=16)
 
     location = PointField()
 
     @property
     def latitude(self) -> Decimal:
-        return self.location.y
+        """Get the latitude from the location point.
+
+        Returns:
+            Decimal: latitude
+        """
+        return Decimal(self.location.y)
 
     @property
     def longitude(self) -> Decimal:
-        return self.location.x
+        """Get the longitude from the location point.
+
+        Returns:
+            Decimal: longitude
+        """
+        return Decimal(self.location.x)
 
 
 class Booking(Model):
@@ -76,7 +87,11 @@ class Booking(Model):
         verbose_name_plural = "bookings"
 
     admin = ForeignKey(User, on_delete=CASCADE, related_name="admin_bookings")
-    invitees = ManyToManyField(User, related_name="invitee_bookings")
+    invitees = ManyToManyField(
+        User,
+        related_name="invitee_bookings",
+        blank=True,
+    )
 
     cost = DecimalField(max_digits=12, decimal_places=2, blank=True, null=True)
     name = CharField(max_length=1000)
@@ -99,6 +114,25 @@ class Booking(Model):
 
     history = HistoricalRecords(inherit=True)
 
+    def to_dict(self) -> BookingToDict:
+        """Convert model instance to dictionary.
+
+        Returns:
+            BookingToDict: dictionary representation of instance
+        """
+        return {
+            "admin": self.admin.id,
+            "invitees": list(self.invitees.all().values_list("id", flat=True)),
+            "cost": self.cost,
+            "name": self.name,
+            "link": self.link,
+            "start_date_time": self.start_date_time.isoformat(),
+            "end_date_time": self.end_date_time.isoformat(),
+            "status": self.status,
+            "created_at": self.created_at.isoformat(),
+            "updated_at": self.updated_at.isoformat(),
+        }
+
     def _reassign_admin(self):
-        """TODO: Handle reassignment to invitees if admin is deleted or needs to be reassigned."""
+        """TODO: Handle re-assignment to invitees if admin is deleted or needs to be reassigned."""
         pass

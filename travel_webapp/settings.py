@@ -95,7 +95,8 @@ WSGI_APPLICATION = "travel_webapp.wsgi.application"
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.postgresql",
+        # "ENGINE": "django.db.backends.postgresql",
+        "ENGINE": "django.contrib.gis.db.backends.postgis",
         "NAME": os.getenv("DATABASE_NAME", "default_db_name"),
         "USER": os.getenv("DATABASE_USER", "default_user"),
         "PASSWORD": os.getenv("DATABASE_PASSWORD", ""),
