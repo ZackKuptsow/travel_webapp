@@ -21,6 +21,13 @@
     -   Find restaurants based off previous selections
     -   Tripadvisor again
 
+## Exports
+
+-   Export to google maps
+-   Export to pdf, doc
+-   Export to calendar
+-   Once exported, figure out how to prevent rapid sharing for free
+
 ## User interaction
 
 -   Admin-Invitee interaction for trip planning

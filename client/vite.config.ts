@@ -1,27 +1,22 @@
 import { defineConfig } from 'vite'
+import autoprefixer from 'autoprefixer'
 import react from '@vitejs/plugin-react-swc'
+import tailwindcss from 'tailwindcss'
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react({swcOptions: {
-    jsc: {
-      parser: {
-        // enable typescript parsing 
-        syntax: 'typescript',
-        // enable tsx
-        tsx: true,
-      },
-      transform: {
-        react: {
-          // react jsx transfromations
-          runtime: 'automatic',
-        }
-      }
+  css: {
+    postcss: {
+      plugins: [
+        autoprefixer,
+        tailwindcss,
+      ]
     }
-  }})],
+  },
   esbuild: {
     // disable esbuild typescript handling because using SWC
     // jsxInject: `import React from 'react'`,
     tsconfigRaw: require('./tsconfig.json'),
-  }
+  },
+  plugins: [react()],
 })
